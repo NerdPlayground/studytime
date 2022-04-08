@@ -43,3 +43,13 @@ def edit_room(request,pk):
         return render(request,'rooms/room_form.html',context)
     except Room.DoesNotExist:
         raise Http404
+
+def delete_room(request,pk):
+    try:
+        room= Room.objects.get(id=pk)
+        if request.method == 'POST':
+            room.delete()
+            return redirect('home')
+        return render(request,'delete.html',{'obj':room})
+    except Room.DoesNotExist:
+        raise Http404
