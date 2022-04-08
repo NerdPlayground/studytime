@@ -9,6 +9,7 @@
         <ol>
             {% for room in rooms %}
                 <div>
+                    <a href="{% url 'edit-room' room.id %}">edit room</a><br/>
                     <span>{{room.host}}</span>
                     <li>
                         <a href="{% url 'room' room.id %}">{{room.name}}</a>
