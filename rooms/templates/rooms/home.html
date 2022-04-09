@@ -52,13 +52,16 @@
             <ol>
                 {% for room in rooms %}
                     <div>
-                        <a href="{% url 'edit-room' room.id %}">edit room</a><br/>
                         <span>@{{room.host}}</span>
                         <li>
                             <a href="{% url 'room' room.id %}">{{room.name}}</a>
                         </li>
-                        <a href="{% url 'delete-room' room.id %}">delete room</a><br/>
-                        <small>{{room.topic.name}}</small>
+                        <small>{{room.topic.name}}</small><br/><br/>
+
+                        {% if request.user == room.host %}
+                            <a href="{% url 'edit-room' room.id %}">edit room</a><br/>
+                            <a href="{% url 'delete-room' room.id %}">delete room</a><br/>
+                        {% endif %}
                         <hr/>
                     </div>
                 {% endfor %}

@@ -3,7 +3,9 @@ from django.db.models import Q
 from topics.models import Topic
 from django.http import Http404
 from rooms.forms import RoomForm
+from django.http import HttpResponse
 from django.shortcuts import render,redirect
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     query= request.GET.get('query') if request.GET.get('query') != None else ''
@@ -24,6 +26,7 @@ def room(request,pk):
     except Room.DoesNotExist:
         raise Http404
 
+@login_required(login_url='login')
 def create_room(request):
     form= RoomForm()
 
@@ -36,11 +39,15 @@ def create_room(request):
     context= {"form":form}
     return render(request,'rooms/room_form.html',context)
 
+@login_required(login_url='login')
 def edit_room(request,pk):
     try:
         room= Room.objects.get(id=pk)
         form= RoomForm(instance=room)
 
+        if request.user != room.host:
+            return HttpResponse("Warning: Current user and host don't match.")
+        
         if request.method == 'POST':
             form= RoomForm(request.POST,instance=room)
             if form.is_valid():
@@ -52,9 +59,14 @@ def edit_room(request,pk):
     except Room.DoesNotExist:
         raise Http404
 
+@login_required(login_url='login')
 def delete_room(request,pk):
     try:
         room= Room.objects.get(id=pk)
+
+        if request.user != room.host:
+            return HttpResponse("Warning: Current user and host don't match.")
+            
         if request.method == 'POST':
             room.delete()
             return redirect('home')
