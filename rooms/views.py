@@ -1,17 +1,25 @@
 from rooms.models import Room
+from django.db.models import Q
+from topics.models import Topic
 from django.http import Http404
 from rooms.forms import RoomForm
 from django.shortcuts import render,redirect
 
 def home(request):
-    rooms= Room.objects.all()
-    context= {"rooms": rooms}
+    query= request.GET.get('query') if request.GET.get('query') != None else ''
+    rooms= Room.objects.filter(
+        Q(topic__name__icontains=query) |
+        Q(name__icontains=query) |
+        Q(description__icontains=query)
+    )
+    topics= Topic.objects.all()
+    context= {"rooms":rooms,"topics":topics,"room_count":rooms.count()}
     return render(request,'rooms/home.html',context)
 
 def room(request,pk):
     try:
         room= Room.objects.get(pk=pk)
-        context= {"room": room}
+        context= {"room":room}
         return render(request,'rooms/room.html',context)
     except Room.DoesNotExist:
         raise Http404
@@ -25,7 +33,7 @@ def create_room(request):
             form.save()
             return redirect('home')
     
-    context= {'form': form}
+    context= {"form":form}
     return render(request,'rooms/room_form.html',context)
 
 def edit_room(request,pk):
@@ -39,7 +47,7 @@ def edit_room(request,pk):
                 form.save()
                 return redirect('home')
 
-        context= {'form':form}
+        context= {"form":form}
         return render(request,'rooms/room_form.html',context)
     except Room.DoesNotExist:
         raise Http404
