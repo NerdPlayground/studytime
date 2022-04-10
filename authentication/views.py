@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate,login,logout
 
-def access_study_time(request):
+def login_study_time(request):
     if request.user.is_authenticated:
         return redirect('home')
     
@@ -18,8 +18,8 @@ def access_study_time(request):
             messages.error(request,"Warning: User with provided credentials does not exist")
 
     context= {}
-    return render(request,'authentication/access.html',context)
+    return render(request,'authentication/login.html',context)
 
-def leave_study_time(request):
+def logout_study_time(request):
     logout(request)
     return redirect('home')
