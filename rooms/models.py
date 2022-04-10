@@ -20,7 +20,11 @@ class Room(models.Model):
     )
     name= models.CharField(max_length=255)
     description= models.TextField()
-    # Participants= models.
+    participants= models.ManyToManyField(
+        'auth.User',
+        related_name='contributors',
+        blank=True
+    )
     created= models.DateTimeField(auto_now_add=True)
     updated= models.DateTimeField(auto_now=True)
 

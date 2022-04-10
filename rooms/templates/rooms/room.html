@@ -2,12 +2,62 @@
 
 {% block content %}
 
-<h1>{{room}}</h1>
-<hr/>
-<div>
-    <h3>Description</h3>
-    <p>{{room.description}}</p>
-    <hr>
+<style>
+    .room-container{
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+    }
+</style>
+
+<div class="room-container">
+    <div>
+        <h1>{{room}}</h1>
+        <hr/>
+
+        <div>
+            <h3>Description</h3>
+            <p>{{room.description}}</p>
+            <hr>
+        </div>
+
+        <div class="contributions-wrapper">
+            <h3>Contributions</h3>
+            <hr/>
+                {% if contributions|length == 0 %}
+                    <p>No contributions have been made in this room.</p>
+                    <hr/>
+                {% else %}
+                    {% for contribution in contributions %}
+                        <small>@{{contribution.user}} {{contribution.created|timesince}} ago</small>
+                        <p>{{contribution.body}}</p>
+
+                        {% if request.user == contribution.user %}
+                            <a href="{% url 'delete-contribution' contribution.id %}">Delete</a>
+                        {% endif %}
+                        <hr/>
+                    {% endfor %}
+                {% endif %}
+        </div>
+
+        {% if request.user.is_authenticated %}
+            <div class="contribution-form">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <input type="text" name="body" placeholder="add your contribution..."/>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+
+    <div>
+        <h3>Participants</h3>
+        <hr/>
+        {% for contributor in contributors %}
+            <div>
+                <p>@{{contributor.username}}</p>
+            </div>
+        {% endfor %}
+    </div>
 </div>
 
 {% endblock %}

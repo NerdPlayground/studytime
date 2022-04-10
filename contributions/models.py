@@ -23,4 +23,4 @@ class Contribution(models.Model):
     updated= models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.host.name +"'s contribution"
+        return self.user.username +"'s contribution"

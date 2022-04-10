@@ -1,10 +1,10 @@
 from rooms.models import Room
 from django.db.models import Q
 from topics.models import Topic
-from django.http import Http404
 from rooms.forms import RoomForm
-from django.http import HttpResponse
+from django.http import Http404,HttpResponse
 from django.shortcuts import render,redirect
+from contributions.models import Contribution
 from django.contrib.auth.decorators import login_required
 
 def home(request):
@@ -20,8 +20,24 @@ def home(request):
 
 def room(request,pk):
     try:
-        room= Room.objects.get(pk=pk)
-        context= {"room":room}
+        room= Room.objects.get(id=pk)
+        contributions= Contribution.objects.filter(room=room).order_by('-created')
+
+        if request.method == 'POST':
+            contribution= Contribution.objects.create(
+                user= request.user,
+                room= room,
+                body= request.POST.get('body')
+            )
+            contribution.save()
+            room.participants.add(request.user)
+            return redirect('room',pk=room.id)
+
+        context= {
+            "room":room,
+            "contributions":contributions,
+            "contributors": room.participants.all()
+        }
         return render(request,'rooms/room.html',context)
     except Room.DoesNotExist:
         raise Http404
