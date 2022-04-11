@@ -1,17 +1,23 @@
 <h3>Browse Topics</h3>
 <hr/>
 <ul>
-    <div>
-        <li>
-            <a href="{% url 'home' %}">All</a>
-        </li>
-    </div>
-
-    {% for topic in topics %}
+    {% if topics|length != 0 %}
         <div>
             <li>
-                <a href="{% url 'home' %}?query={{topic.name}}">{{topic.name}}</a>
+                <a href="{% url 'home' %}">All</a>
             </li>
         </div>
-    {% endfor %}
+
+        {% for topic in topics %}
+            <div>
+                <li>
+                    <a href="{% url 'home' %}?query={{topic.name}}">{{topic.name}}</a>
+                </li>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div>
+            <p>No topics available</p>
+        </div>
+    {% endif %}
 </ul>

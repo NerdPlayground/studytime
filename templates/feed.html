@@ -1,19 +1,25 @@
-<ol>
-    {% for room in rooms %}
-        <div>
-            <span>
-                <a href="{% url 'profile' room.host.id %}">@{{room.host}}</a>
-            </span>
-            <li>
-                <a href="{% url 'room' room.id %}">{{room.name}}</a>
-            </li>
-            <small>{{room.topic.name}}</small><br/><br/>
+{% if rooms|length != 0 %}
+    <ol>
+        {% for room in rooms %}
+            <div>
+                <span>
+                    <a href="{% url 'profile' room.host.id %}">@{{room.host}}</a>
+                </span>
+                <li>
+                    <a href="{% url 'room' room.id %}">{{room.name}}</a>
+                </li>
+                <small>{{room.topic.name}}</small><br/><br/>
 
-            {% if request.user == room.host %}
-                <a href="{% url 'edit-room' room.id %}">edit room</a><br/>
-                <a href="{% url 'delete-room' room.id %}">delete room</a><br/>
-            {% endif %}
-            <hr/>
-        </div>
-    {% endfor %}
-</ol>
+                {% if request.user == room.host %}
+                    <a href="{% url 'edit-room' room.id %}">edit room</a><br/>
+                    <a href="{% url 'delete-room' room.id %}">delete room</a><br/>
+                {% endif %}
+                <hr/>
+            </div>
+        {% endfor %}
+    </ol>
+{% else %}
+    <div>
+        <p><center>No rooms available</center></p>
+    </div>
+{% endif %}
