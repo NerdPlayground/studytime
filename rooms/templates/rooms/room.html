@@ -52,11 +52,17 @@
     <div>
         <h3>Participants</h3>
         <hr/>
-        {% for contributor in contributors %}
+        {% if contributors|length != 0 %}
+            {% for contributor in contributors %}
+                <div>
+                    <p>@{{contributor.username}}</p>
+                </div>
+            {% endfor %}
+        {% else %}
             <div>
-                <p>@{{contributor.username}}</p>
+                <p>No contributors available</p>
             </div>
-        {% endfor %}
+        {% endif %}
     </div>
 </div>
 
