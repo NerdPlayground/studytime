@@ -2,7 +2,10 @@
 <hr/>
 {% for activity in activities %}
     <div>
-        <small>@{{activity.user}} {{activity.created|timesince}}</small>
+        <small>
+            <a href="{% url 'profile' activity.user.id %}">@{{activity.user}}</a>
+            {{activity.created|timesince}}
+        </small>
         <p>contributed to "{{activity.room}}" under topic "{{activity.room.topic}}"</p>
         <p>{{activity.body}}</p>
 

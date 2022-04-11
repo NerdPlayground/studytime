@@ -1,6 +1,10 @@
-from multiprocessing import context
+from rooms.models import Room
+from topics.models import Topic
+from django.http import Http404
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.shortcuts import render,redirect
+from contributions.models import Contribution
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login,logout
 
@@ -36,6 +40,22 @@ def login_study_time(request):
 
     context= {}
     return render(request,'authentication/login.html',context)
+
+def profile(request,pk):
+    try:
+        user= User.objects.get(id=pk)
+        topics= Topic.objects.all()
+        rooms= Room.objects.filter(host=user)
+        activities= Contribution.objects.filter(user=user)
+        context= {
+            "user": user,
+            "topics": topics,
+            "rooms": rooms,
+            "activities": activities,
+        }
+        return render(request,'authentication/profile.html',context)
+    except User.DoesNotExist:
+        raise Http404
 
 def logout_study_time(request):
     logout(request)

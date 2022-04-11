@@ -1,7 +1,9 @@
 <ol>
     {% for room in rooms %}
         <div>
-            <span>@{{room.host}}</span>
+            <span>
+                <a href="{% url 'profile' room.host.id %}">@{{room.host}}</a>
+            </span>
             <li>
                 <a href="{% url 'room' room.id %}">{{room.name}}</a>
             </li>
