@@ -3,6 +3,11 @@ from django.shortcuts import render,redirect
 from contributions.models import Contribution
 from django.contrib.auth.decorators import login_required
 
+def all_activities(request):
+    activities= Contribution.objects.all()
+    context= {"activities":activities}
+    return render(request,'contributions/activities.html',context)
+
 @login_required(login_url='login')
 def delete_contribution(request,pk):
     try:

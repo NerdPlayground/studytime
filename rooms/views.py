@@ -13,14 +13,16 @@ def home(request):
         Q(topic__name__icontains=query) |
         Q(name__icontains=query) |
         Q(description__icontains=query)
-    )
+    ).order_by('-created')
     topics= Topic.objects.all()
+
     activities= Contribution.objects.filter(
         Q(room__topic__name__icontains=query)
     ).order_by('-created')
     context= {
         "rooms":rooms,
-        "topics":topics,
+        "topics":topics[0:5],
+        "all_topics":topics.count(),
         "activities":activities,
         "room_count":rooms.count()
     }

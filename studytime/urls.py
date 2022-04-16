@@ -21,5 +21,6 @@ urlpatterns = [
     path('',include('rooms.urls')),
     path('',include('authentication.urls')),
     path('',include('contributions.urls')),
+    path('',include('topics.urls')),
     # path('',include('.urls')),
 ]
