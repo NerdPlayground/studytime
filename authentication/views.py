@@ -2,11 +2,13 @@ from rooms.models import Room
 from topics.models import Topic
 from django.http import Http404
 from django.contrib import messages
+from authentication.forms import UserForm
 from django.contrib.auth.models import User
 from django.shortcuts import render,redirect
 from contributions.models import Contribution
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.decorators import login_required
 
 def register_study_time(request):
     form= UserCreationForm()
@@ -56,6 +58,20 @@ def profile(request,pk):
         return render(request,'authentication/profile.html',context)
     except User.DoesNotExist:
         raise Http404
+
+@login_required(login_url='login')
+def update_profile(request):
+    user= request.user
+    form= UserForm(instance=user)
+
+    if request.method == 'POST':
+        form= UserForm(request.POST,instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile',pk=user.id)
+
+    context= {"form":form}
+    return render(request,'authentication/update.html',context)
 
 def logout_study_time(request):
     logout(request)

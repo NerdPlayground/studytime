@@ -9,21 +9,52 @@
     }
 </style>
 
-<h1>{{user.username}}</h1>
-<hr/>
+<main class="profile-page layout layout--3">
+    <div class="container">
+        <!-- Topics Start -->
+        <div class="topics">
+            {% include 'topics.html' %}
+        </div>
+        <!-- Topics End -->
 
-<div class="profile-container">
-    <div>
-        {% include 'topics.html' %}
-    </div>
+        <!-- Room List Start -->
+        <div class="roomList">
+            <div class="profile">
+                <div class="profile__avatar">
+                    <div class="avatar avatar--large active">
+                        <img src="https://randomuser.me/api/portraits/men/11.jpg" />
+                    </div>
+                </div>
 
-    <div>
-        {% include 'feed.html' %}
-    </div>
+                <div class="profile__info">
+                    <h3>{{user.first_name}} {{user.last_name}}</h3>
+                    <p>@{{user.username}}</p>
+                    {% if request.user == user %}
+                        <a href="{% url 'update' %}" class="btn btn--main btn--pill">Edit Profile</a>
+                    {% endif %}
+                </div>
 
-    <div>
-        {% include 'activities.html' %}
+                <div class="profile__about">
+                    <h3>About</h3>
+                </div>
+            </div>
+
+            <div class="roomList__header">
+                <div>
+                    <h2>Study Rooms Hosted by {{user.username}}</h2>
+                </div>
+            </div>
+            {% include 'feed.html' %}
+
+        </div>
+        <!-- Room List End -->
+
+        <!-- Activities Start -->
+        <div class="activities">
+            {% include 'activities.html' %}
+        </div>
+        <!-- Activities End -->
     </div>
-</div>
+</main>
 
 {% endblock %}

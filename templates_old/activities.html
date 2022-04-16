@@ -1,0 +1,24 @@
+<h3>Activity Feed</h3>
+<hr/>
+
+{% if activities|length != 0 %}
+    {% for activity in activities %}
+        <div>
+            <small>
+                <a href="{% url 'profile' activity.user.id %}">@{{activity.user}}</a>
+                {{activity.created|timesince}}
+            </small>
+            <p>contributed to "{{activity.room}}" under topic "{{activity.room.topic}}"</p>
+            <p>{{activity.body}}</p>
+
+            {% if request.user == activity.user %}
+                <a href="{% url 'delete-contribution' activity.id %}">Delete</a>
+            {% endif %}
+            <hr/>
+        </div>
+    {% endfor %}
+{% else %}
+    <div>
+        <p>No activity available</p>
+    </div>
+{% endif %}
