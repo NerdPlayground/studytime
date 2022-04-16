@@ -52,6 +52,7 @@ def profile(request,pk):
         context= {
             "user": user,
             "topics": topics,
+            "all_topics": topics.count(),
             "rooms": rooms,
             "activities": activities,
         }
