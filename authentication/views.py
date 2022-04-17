@@ -3,7 +3,7 @@ from topics.models import Topic
 from django.http import Http404
 from django.contrib import messages
 from authentication.forms import UserForm
-from django.contrib.auth.models import User
+from authentication.models import User
 from django.shortcuts import render,redirect
 from contributions.models import Contribution
 from django.contrib.auth.forms import UserCreationForm

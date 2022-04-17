@@ -1,6 +1,6 @@
 import uuid
 from django.db import models
-from django.contrib.auth.models import User
+from authentication.models import User
 
 class Room(models.Model):
     id= models.UUIDField(
@@ -9,7 +9,7 @@ class Room(models.Model):
         editable=False
     )
     host= models.ForeignKey(
-        'auth.User',
+        'authentication.User',
         related_name='rooms',
         on_delete=models.CASCADE
     )
@@ -21,7 +21,7 @@ class Room(models.Model):
     name= models.CharField(max_length=255)
     description= models.TextField()
     participants= models.ManyToManyField(
-        'auth.User',
+        'authentication.User',
         related_name='contributors',
         blank=True
     )

@@ -1,6 +1,6 @@
 import uuid
 from django.db import models
-from django.contrib.auth.models import User
+from authentication.models import User
 
 class Contribution(models.Model):
     id= models.UUIDField(
@@ -9,7 +9,7 @@ class Contribution(models.Model):
         editable=False
     )
     user= models.ForeignKey(
-        'auth.User',
+        'authentication.User',
         related_name='contributions',
         on_delete=models.CASCADE
     )
