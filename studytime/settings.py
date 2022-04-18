@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import django_heroku
 from pathlib import Path
 from decouple import config
 
@@ -42,9 +43,11 @@ INSTALLED_APPS = [
     'rooms',
     'contributions',
     'authentication',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -136,5 +139,11 @@ MEDIA_ROOT= BASE_DIR/'static/images'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Custom Settings
+# Custom User
 AUTH_USER_MODEL= 'authentication.User'
+
+# Allow external access
+CORS_ALLOW_ALL_ORIGINS= True
+
+# Configure Django App for Heroku.
+django_heroku.settings(locals())
