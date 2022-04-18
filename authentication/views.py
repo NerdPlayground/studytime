@@ -2,18 +2,17 @@ from rooms.models import Room
 from topics.models import Topic
 from django.http import Http404
 from django.contrib import messages
-from authentication.forms import UserForm
 from authentication.models import User
 from django.shortcuts import render,redirect
 from contributions.models import Contribution
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
+from authentication.forms import UpdateUserForm,RegisterUserForm
 
 def register_study_time(request):
-    form= UserCreationForm()
+    form= RegisterUserForm()
     if request.method == 'POST':
-        form= UserCreationForm(request.POST)
+        form= RegisterUserForm(request.POST)
         if form.is_valid():
             user= form.save(commit=False)
             user.save()
@@ -63,10 +62,10 @@ def profile(request,pk):
 @login_required(login_url='login')
 def update_profile(request):
     user= request.user
-    form= UserForm(instance=user)
+    form= UpdateUserForm(instance=user)
 
     if request.method == 'POST':
-        form= UserForm(request.POST,instance=user)
+        form= UpdateUserForm(request.POST,request.FILES,instance=user)
         if form.is_valid():
             form.save()
             return redirect('profile',pk=user.id)

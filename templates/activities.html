@@ -8,7 +8,7 @@
             <div class="activities__boxHeader roomListRoom__header">
                 <a href="{% url 'profile' activity.user.id %}" class="roomListRoom__author">
                     <div class="avatar avatar--small">
-                        <img src="https://randomuser.me/api/portraits/women/11.jpg" />
+                        <img src="{{activity.user.avatar.url}}" />
                     </div>
                     <p>
                         @{{activity.user.username}}
@@ -30,11 +30,11 @@
 
             <div class="activities__boxContent">
                 <p>
-                    replied to post
-                    <a href="room.html">{{activity.room}}</a>
+                    replied to room
+                    <a href="{% url 'room' activity.room.id %}">{{activity.room}}</a>
                 </p>
                 <div class="activities__boxRoomContent">
-                    {{activity.body}}
+                    {{activity.body|truncatewords_html:8}}
                 </div>
             </div>
         </div>
